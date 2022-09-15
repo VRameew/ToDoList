@@ -31,22 +31,32 @@ class NewVisitorTest(unittest.TestCase):
         )
         # She types in the text box "Buy peacock feathers"
         # (her hobby is tying fishing flies). When she presses enter,
+        time.sleep(1)
+        input_box.send_keys('Buy peacock feathers')
+        time.sleep(1)
         input_box.send_keys(Keys.ENTER)
-        time.sleep(5)
+        time.sleep(3)
 
         table = self.browser.find_element(by=By.ID, value='id_list_table')
         rows = table.find_elements(by=By.TAG_NAME, value='tr')
-        self.assertTrue(
-            any(row.text == '1: Buy Peacock Feathers' for row in rows),
-            "Новый элемент списка не появился в таблице"
-        )
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
         # the page refreshes and the page now contains
         # "1: Buy Peacock Feathers" as a list item.
         # The text box still prompts her to add another item.
         # She types "Make a fly out of peacock feathers"
         # (Edith is very methodical)
+        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
+        time.sleep(1)
+        input_box.send_keys('Make a fly out of peacock feathers')
+        time.sleep(1)
+        input_box.send_keys(Keys.ENTER)
+        time.sleep(3)
         # The page refreshes again to show both items in her list.
+        table = self.browser.find_element(by=By.ID, value='id_list_table')
+        tows = table.find_elements(by=By.TAG_NAME, value='tr')
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn('2: Make a fly out of peacock feathers', [row.text for row in rows])
         # Edith wonders if the site will remember her list.
         # Next, she sees that the site has generated a unique URL for her
         # - a small text with explanations is displayed about this.
