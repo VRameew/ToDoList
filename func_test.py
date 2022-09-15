@@ -16,6 +16,12 @@ class NewVisitorTest(unittest.TestCase):
         """finalize"""
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        """verification string in table rows"""
+        table = self.browser.find_element(by=By.ID, value='id_list_table')
+        rows = table.find_elements(by=By.TAG_NAME, value='tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Test is starting of list and showed it later
         self.browser.get('http://localhost:8000')
@@ -36,10 +42,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
         input_box.send_keys(Keys.ENTER)
         time.sleep(3)
-
-        table = self.browser.find_element(by=By.ID, value='id_list_table')
-        rows = table.find_elements(by=By.TAG_NAME, value='tr')
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # the page refreshes and the page now contains
         # "1: Buy Peacock Feathers" as a list item.
@@ -53,10 +56,8 @@ class NewVisitorTest(unittest.TestCase):
         input_box.send_keys(Keys.ENTER)
         time.sleep(3)
         # The page refreshes again to show both items in her list.
-        table = self.browser.find_element(by=By.ID, value='id_list_table')
-        tows = table.find_elements(by=By.TAG_NAME, value='tr')
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
-        self.assertIn('2: Make a fly out of peacock feathers', [row.text for row in rows])
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
+        self.check_for_row_in_list_table('2: Make a fly out of peacock feathers')
         # Edith wonders if the site will remember her list.
         # Next, she sees that the site has generated a unique URL for her
         # - a small text with explanations is displayed about this.
