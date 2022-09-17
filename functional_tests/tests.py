@@ -1,12 +1,13 @@
-import time
+from django.test import LiveServerTestCase
+from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-from selenium import webdriver
 import unittest
+import time
 
 
-class NewVisitorTest(unittest.TestCase):
-    """Test new user"""
+class NewVisitorTest(LiveServerTestCase):
+    """Test with Django manegment"""
 
     def setUp(self):
         """initialize"""
@@ -24,7 +25,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Test is starting of list and showed it later
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         # She sees that the title and header of the page are talking about to-do lists.
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element(by=By.TAG_NAME, value='h1').text
@@ -64,7 +65,3 @@ class NewVisitorTest(unittest.TestCase):
         # She visits this URL - her list is still there.
         # Satisfied, she goes back to sleep
         self.fail('End of test!')
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
