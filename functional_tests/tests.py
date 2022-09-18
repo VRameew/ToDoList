@@ -29,7 +29,7 @@ class NewVisitorTest(LiveServerTestCase):
                 self.assertIn(row_text, [row.text for row in rows])
                 return
             except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time >MAX_WAIT:
+                if time.time() - start_time > MAX_WAIT:
                     raise e
                 time.sleep(0.5)
 
@@ -79,7 +79,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.wait_for_row_in_list_table('1: Buy peacock feathers')
 
         editth_list_url = self.browser.current_url
-        self.assertRegex(editth_list_url,  '/lists/.+')
+        self.assertRegex(editth_list_url, '/lists/.+')
 
         # Now a new user, Francis, is coming to the site.
         # We use a new browser session,
@@ -90,8 +90,8 @@ class NewVisitorTest(LiveServerTestCase):
         # Francis visits the homepage. There is no sign of Edith's list
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element(by=By.TAG_NAME, value='body').text
-        self.assertIn('Buy peacock feathers', page_text)
-        self.assertIn('Make a fly out of peacock feathers', page_text)
+        self.assertNotIn('Buy peacock feathers', page_text)
+        self.assertNotIn('Make a fly out of peacock feathers', page_text)
         # Francis starts a new list by introducing a new element.
         # It's less interesting than Edith's list...
         input_box = self.browser.find_element(by=By.ID, value='id_new_item')
