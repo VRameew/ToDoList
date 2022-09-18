@@ -4,6 +4,23 @@ from lists.views import home_page
 from lists.models import Item
 
 
+class ListViewTest(TestCase):
+    """list view test"""
+    def test_uses_list_template(self):
+        response = self.client.get('/lists/one-of-one/')
+        self.assertTemplateUsed(response, 'list.html')
+
+    def test_displays_all_list_items(self):
+        """checking the display of all elements"""
+        Item.objects.create(text='item 1')
+        Item.objects.create(text='item 2')
+
+        response = self.client.get('/lists/one-of-one/')
+
+        self.assertContains(response, 'item 1')
+        self.assertContains(response, 'item 2')
+
+
 class HomePageTest(TestCase):
     """Home-page tests"""
     def test_root_url_resolves_to_home_page_view(self):
@@ -26,22 +43,12 @@ class HomePageTest(TestCase):
         """redirect after POST"""
         response = self.client.post('/', data={'item_text': 'A new list item'})
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/one-of-one/')
 
     def test_only_saves_items_when_necessary(self):
         """Save elements if it need"""
         self.client.get('')
         self.assertEqual(Item.objects.count(), 0)
-
-    def test_displays_all_list_items(self):
-        """checking the display of all elements"""
-        Item.objects.create(text='item 1')
-        Item.objects.create(text='item 2')
-
-        response = self.client.get('')
-
-        self.assertIn('item 1', response.content.decode())
-        self.assertIn('item 2', response.content.decode())
 
 
 class ItemModelTest(TestCase):

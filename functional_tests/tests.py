@@ -86,7 +86,7 @@ class NewVisitorTest(LiveServerTestCase):
         # thereby ensuring that no information from Edith
         # gets passed through cookie data, etc.
         self.browser.quit()
-        self.browser = webdriver.Firefox
+        self.browser = webdriver.Firefox()
         # Francis visits the homepage. There is no sign of Edith's list
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element(by=By.TAG_NAME, value='body').text
@@ -98,7 +98,7 @@ class NewVisitorTest(LiveServerTestCase):
         input_box.send_keys('Buy milk')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: Buy milk')
-        #Francis gets a unique URL
+        # Francis gets a unique URL
         francis_list_url = self.browser.current_url
         self.assertRegex(francis_list_url, '/lists/.+')
         self.assertNotEqual(francis_list_url, editth_list_url)
