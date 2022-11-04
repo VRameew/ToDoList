@@ -1,41 +1,14 @@
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .base import FunctionalTest
 from selenium import webdriver
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import WebDriverException
-import time
-import os
+
 
 MAX_WAIT = 10
 
 
-class NewVisitorTest(StaticLiveServerTestCase):
+class NewVisitorTest(FunctionalTest):
     """Test with Django manegment"""
-
-    def setUp(self):
-        """initialize"""
-        self.browser = webdriver.Firefox()
-        starting_server = os.environ.get('STAGING_SERVER')
-        if starting_server:
-            self.live_server_url =  'http://' + starting_server
-
-    def tearDown(self):
-        """finalize"""
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        """wait string in table rows"""
-        start_time = time.time()
-        while True:
-            try:
-                table = self.browser.find_element(by=By.ID, value='id_list_table')
-                rows = table.find_elements(by=By.TAG_NAME, value='tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return
-            except (AssertionError, WebDriverException) as e:
-                if time.time() - start_time > MAX_WAIT:
-                    raise e
-                time.sleep(0.5)
 
     def test_can_start_a_list_for_one_user(self):
         # Test is starting of list and showed it later
@@ -110,20 +83,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
         page_text = self.browser.find_element(by=By.TAG_NAME, value='body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
-
-    def test_layout_and_styling(self):
-        """testing page and style"""
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2, 512, delta=10
-        )
-        input_box.send_keys('test')
-        input_box.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: test')
-        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2, 512, delta=10
-        )
