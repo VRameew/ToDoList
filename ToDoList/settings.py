@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-paiz69@rr57d%v6$@i2#zf_e4+e!j$k$j#a52^n+mbm3d396ma
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ramzz.xyz', 'www.ramzz.xyz']
+ALLOWED_HOSTS = ['ramzz.ru', 'www.ramzz.ru']
 
 
 # Application definition
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CSRF_TRUSTED_ORIGINS = ["http://ramzz.xyz", "http://www.ramzz.xyz", "https://ramzz.xyz", "https://www.ramzz.xyz"]
+CSRF_TRUSTED_ORIGINS = ["http://ramzz.ru", "http://www.ramzz.ru", "https://ramzz.ru", "https://www.ramzz.ru"]
 
 ROOT_URLCONF = 'ToDoList.urls'
 
