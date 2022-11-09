@@ -18,7 +18,7 @@ class NewVisitorTest(FunctionalTest):
         header_text = self.browser.find_element(by=By.TAG_NAME, value='h1').text
         self.assertIn('To-Do', header_text)
         # She is immediately prompted to enter a list item.
-        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
+        input_box = self.get_item_input_box()
         self.assertEqual(
             input_box.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -34,7 +34,7 @@ class NewVisitorTest(FunctionalTest):
         # The text box still prompts her to add another item.
         # She types "Make a fly out of peacock feathers"
         # (Edith is very methodical)
-        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
+        input_box = self.get_item_input_box()
         input_box.send_keys('Make a fly out of peacock feathers')
         input_box.send_keys(Keys.ENTER)
         # The page refreshes again to show both items in her list.
@@ -50,7 +50,7 @@ class NewVisitorTest(FunctionalTest):
         """Many users can start a list Of To-Do"""
         # Edit start new list
         self.browser.get(self.live_server_url)
-        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
+        input_box = self.get_item_input_box()
         input_box.send_keys('Buy peacock feathers')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: Buy peacock feathers')
@@ -71,7 +71,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertNotIn('Make a fly out of peacock feathers', page_text)
         # Francis starts a new list by introducing a new element.
         # It's less interesting than Edith's list...
-        input_box = self.browser.find_element(by=By.ID, value='id_new_item')
+        input_box = self.get_item_input_box()
         input_box.send_keys('Buy milk')
         input_box.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: Buy milk')
