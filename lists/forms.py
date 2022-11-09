@@ -1,13 +1,15 @@
 from django import forms
+from lists.models import Item
 
 
-class ItemForm(forms.Form):
+class ItemForm(forms.models.ModelForm):
     """Form element of list"""
-    item_text = forms.CharField(
-        widget=forms.fields.TextInput(
-            attrs={
+    class Meta:
+        model = Item
+        fields = ('text',)
+        widgets = {
+            'text': forms.fields.TextInput(attrs={
                 'placeholder': 'Enter a to-do item',
                 'class': 'form-control input-lg',
-            }
-        ),
-    )
+            }),
+        }
